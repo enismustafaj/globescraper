@@ -1,9 +1,6 @@
-use std::collections::HashMap;
-use client::GlobeScraperClient;
-use futures::TryStreamExt;
-use serde::{Deserialize, Serialize};
+fn main() {
 
-use globescraper::client;
+}
 
 #[cfg(test)]
 mod tests {
@@ -12,7 +9,7 @@ mod tests {
 
     #[tokio::test]
     async fn get_not_enough_information_result_test() {
-        let globe_client = GlobeScraperClient::<String>::new(
+        let globe_client = client::GlobeScraperClient::<String>::new(
             String::from("bat ctle"),
             String::from("description"),
         );
@@ -36,7 +33,7 @@ mod tests {
     #[tokio::test]
     async fn get_results() {
 
-       let globe_client = GlobeScraperClient::<String>::new(
+       let globe_client = client::GlobeScraperClient::<String>::new(
             String::from("berat castle"),
             String::from("description"),
         );
