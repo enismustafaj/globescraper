@@ -1,36 +1,59 @@
 use std::collections::HashMap;
-
 use client::GlobeScraperClient;
 use futures::TryStreamExt;
 use serde::{Deserialize, Serialize};
 
 use globescraper::client;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct QueryData {
-    index: i8,
-    r#type: String,
-    searchbox_query: String,
-    clicked_category: Option<String>,
-    search_id: String,
-    staged_image: Option<String>,
-}
+#[cfg(test)]
+mod tests {
 
-#[tokio::main]
-async fn main() -> () {
-    let globe_client = GlobeScraperClient::<String>::new(String::from("bat ctle"), String::from("description"));
+    use super::*;
 
-    let mut props = Box::new(HashMap::<String, String>::new());
+    #[tokio::test]
+    async fn get_not_enough_information_result_test() {
+        let globe_client = GlobeScraperClient::<String>::new(
+            String::from("bat ctle"),
+            String::from("description"),
+        );
 
-    match globe_client {
-        Ok(mut client) => {
-            let mut stream = client.get_page(&mut props);
+        let mut props = Box::new(HashMap::<String, String>::new());
+        match globe_client {
+            Ok(mut client) => {
+                let mut stream = client.get_page(&mut props);
 
-            while let Ok(Some(_)) = stream.try_next().await {}
+                while let Ok(Some(_)) = stream.try_next().await {}
+            }
+            Err(_) => todo!(),
         }
-        Err(_) => todo!(),
+
+        let result: String = props.get("description").unwrap().clone();
+
+        assert!(result.contains("I do not have enough information"));
     }
 
-    print!("{}", props.get("description").unwrap());
 
+    #[tokio::test]
+    async fn get_results() {
+
+       let globe_client = GlobeScraperClient::<String>::new(
+            String::from("berat castle"),
+            String::from("description"),
+        );
+
+        let mut props = Box::new(HashMap::<String, String>::new());
+        match globe_client {
+            Ok(mut client) => {
+                let mut stream = client.get_page(&mut props);
+
+                while let Ok(Some(_)) = stream.try_next().await {}
+            }
+            Err(_) => todo!(),
+        }
+
+        let result: String = props.get("description").unwrap().clone();
+
+        assert_eq!(result.contains("I do not have enough information"), false);
+        
+    }
 }

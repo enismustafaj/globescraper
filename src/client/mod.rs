@@ -15,7 +15,7 @@ pub mod contants;
 pub struct GlobeScraperClient<'a, T> {
     client: Box<dyn Client>,
     phantom: PhantomData<&'a T>,
-    description_key: String
+    description_key: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -58,7 +58,7 @@ impl<'a, T> GlobeScraperClient<'a, T> {
         Ok(GlobeScraperClient {
             client: Box::new(client),
             phantom: PhantomData,
-            description_key
+            description_key,
         })
     }
 
@@ -84,7 +84,10 @@ impl<'a, T> GlobeScraperClient<'a, T> {
         return String::from(user_prf);
     }
 
-    pub fn get_page(&'a mut self, props: &'a mut Box<HashMap<String, String>>) -> impl Stream<Item = Result<(), ()>> + 'a {
+    pub fn get_page(
+        &'a mut self,
+        props: &'a mut Box<HashMap<String, String>>,
+    ) -> impl Stream<Item = Result<(), ()>> + 'a {
         return self
             .client
             .stream()
@@ -99,17 +102,21 @@ impl<'a, T> GlobeScraperClient<'a, T> {
                             if index.to_owned() == String::from("top_answer_chunk") {
                                 match ev_data.get("data") {
                                     Some(data) => {
-
-                                        let fomated= data.to_string().as_str().replace("\"", "").replace("\n", "");
+                                        let fomated = data
+                                            .to_string()
+                                            .as_str()
+                                            .replace("\"", "")
+                                            .replace("\n", "");
 
                                         if props.contains_key(&self.description_key) {
-                                            let mut desc = props.get(&self.description_key).unwrap().clone();
+                                            let mut desc =
+                                                props.get(&self.description_key).unwrap().clone();
                                             desc.push_str(fomated.as_str());
                                             props.insert(self.description_key.clone(), desc);
                                         } else {
                                             props.insert(self.description_key.clone(), fomated);
                                         }
-                                    },
+                                    }
                                     None => todo!(),
                                 }
                             }
