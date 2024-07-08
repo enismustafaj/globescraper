@@ -1,11 +1,11 @@
-fn main() {
-
-}
+fn main() {}
 
 #[cfg(test)]
 mod tests {
 
-    use super::*;
+    use futures::TryStreamExt;
+    use globescraper::client;
+    use std::collections::HashMap;
 
     #[tokio::test]
     async fn get_not_enough_information_result_test() {
@@ -29,11 +29,9 @@ mod tests {
         assert!(result.contains("I do not have enough information"));
     }
 
-
     #[tokio::test]
     async fn get_results() {
-
-       let globe_client = client::GlobeScraperClient::<String>::new(
+        let globe_client = client::GlobeScraperClient::<String>::new(
             String::from("berat castle"),
             String::from("description"),
         );
@@ -51,6 +49,5 @@ mod tests {
         let result: String = props.get("description").unwrap().clone();
 
         assert_eq!(result.contains("I do not have enough information"), false);
-        
     }
 }
