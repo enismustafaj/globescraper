@@ -6,7 +6,11 @@ use eventsource_client::{self as es, Client, Error};
 use rand::distributions::{Alphanumeric, DistString};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::{collections::HashMap, marker::PhantomData, time::SystemTime};
+use std::{
+    collections::HashMap,
+    marker::PhantomData,
+    time::SystemTime,
+};
 use urlencoding::encode;
 use uuid::Uuid;
 
@@ -101,12 +105,21 @@ impl<'a, T> GlobeScraperClient<'a, T> {
                                             .replace("\n", "");
 
                                         if props.contains_key(contants::GLOBE_DESCRIPTION_KEY) {
-                                            let mut desc =
-                                                props.get(contants::GLOBE_DESCRIPTION_KEY).unwrap().clone();
+                                            let mut desc = props
+                                                .get(contants::GLOBE_DESCRIPTION_KEY)
+                                                .unwrap()
+                                                .clone();
                                             desc.push_str(formated.as_str());
-                                            props.insert(contants::GLOBE_DESCRIPTION_KEY.to_owned(), desc);
+                                            print!("{}", desc.clone());
+                                            props.insert(
+                                                contants::GLOBE_DESCRIPTION_KEY.to_owned(),
+                                                desc,
+                                            );
                                         } else {
-                                            props.insert(contants::GLOBE_DESCRIPTION_KEY.to_owned(), formated);
+                                            props.insert(
+                                                contants::GLOBE_DESCRIPTION_KEY.to_owned(),
+                                                formated,
+                                            );
                                         }
                                     }
                                     None => todo!(),
@@ -118,6 +131,9 @@ impl<'a, T> GlobeScraperClient<'a, T> {
                 }
                 es::SSE::Comment(_comment) => {}
             })
-            .map_err(|err| eprintln!("error streaming events: {:?}", err));
+            .map_err(|err| {
+                println!("error occurred : {:?}", err.to_string());
+                ()
+            });
     }
 }
