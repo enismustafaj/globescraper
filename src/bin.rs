@@ -10,8 +10,7 @@ mod tests {
     #[tokio::test]
     async fn get_not_enough_information_result_test() {
         let globe_client = client::GlobeScraperClient::<String>::new(
-            String::from("bat ctle"),
-            String::from("description"),
+            String::from("bat ctle")
         );
 
         let mut props = Box::new(HashMap::<String, String>::new());
@@ -24,7 +23,7 @@ mod tests {
             Err(_) => todo!(),
         }
 
-        let result: String = props.get("description").unwrap().clone();
+        let result: String = props.get(client::contants::GLOBE_DESCRIPTION_KEY).unwrap().clone();
 
         assert!(result.contains("I do not have enough information"));
     }
@@ -32,8 +31,7 @@ mod tests {
     #[tokio::test]
     async fn get_results() {
         let globe_client = client::GlobeScraperClient::<String>::new(
-            String::from("berat castle"),
-            String::from("description"),
+            String::from("berat castle")
         );
 
         let mut props = Box::new(HashMap::<String, String>::new());
@@ -46,7 +44,7 @@ mod tests {
             Err(_) => todo!(),
         }
 
-        let result: String = props.get("description").unwrap().clone();
+        let result: String = props.get(client::contants::GLOBE_DESCRIPTION_KEY).unwrap().clone();
 
         assert_eq!(result.contains("I do not have enough information"), false);
     }
