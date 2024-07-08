@@ -110,7 +110,6 @@ impl<'a, T> GlobeScraperClient<'a, T> {
                                                 .unwrap()
                                                 .clone();
                                             desc.push_str(formated.as_str());
-                                            print!("{}", desc.clone());
                                             props.insert(
                                                 contants::GLOBE_DESCRIPTION_KEY.to_owned(),
                                                 desc,
