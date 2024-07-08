@@ -1,0 +1,16 @@
+run-name: Build Test Publish
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  build-lib:
+    name: Build Test lib
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1 
+      - name: Build lib
+        run: cargo build
+
